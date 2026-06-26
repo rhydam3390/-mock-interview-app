@@ -1,0 +1,94 @@
+/* ── Mobile responsiveness additions (Phase 4) ── */
+
+@media (max-width: 640px) {
+  /* Dashboard nav */
+  .dash-nav {
+    padding: 1rem 1.2rem;
+    flex-wrap: wrap;
+    gap: .6rem;
+  }
+  .nav-right {
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+  .nav-user {
+    display: none; /* save space on small screens */
+  }
+
+  /* Dashboard main content */
+  .dash-main {
+    padding: 1.5rem 1.2rem;
+  }
+  .dash-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Stats row stacks to 1 column on very small screens, 2 otherwise handled by grid */
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .75rem;
+  }
+
+  /* Role cards */
+  .role-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Interview page */
+  .interview-wrap {
+    padding: 0 1rem;
+  }
+  .q-text {
+    font-size: 1.05rem;
+  }
+  .interview-header {
+    flex-wrap: wrap;
+    gap: .6rem;
+  }
+
+  /* Results page */
+  .results-wrap {
+    padding: 0 1rem;
+  }
+  .results-actions {
+    flex-direction: column;
+  }
+  .results-actions button {
+    width: 100%;
+  }
+  .qa-item-header {
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  /* Auth pages */
+  .auth-wrap {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 2rem;
+  }
+  .auth-left {
+    text-align: center;
+  }
+  .auth-headline {
+    font-size: 1.8rem;
+  }
+  .auth-features {
+    align-items: center;
+  }
+  .feat {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+  .dash-actions-row {
+    flex-direction: column;
+  }
+  .dash-actions-row button {
+    width: 100%;
+  }
+}

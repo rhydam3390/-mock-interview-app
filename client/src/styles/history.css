@@ -1,0 +1,128 @@
+/* ── Filter chips ── */
+.history-filters {
+  display: flex;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: #101018;
+  border: 1px solid rgba(255,255,255,.08);
+  color: #6b6b80;
+  padding: .5rem 1.1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .85rem;
+  font-weight: 500;
+  transition: all .2s;
+}
+
+.filter-chip:hover {
+  border-color: rgba(108,99,255,.4);
+}
+
+.filter-chip-active {
+  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── History list cards ── */
+.history-item-card {
+  background: #101018;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: .75rem;
+}
+
+.history-item-card:hover {
+  border-color: rgba(108,99,255,.35);
+  transform: translateX(2px);
+}
+
+.hist-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(108,99,255,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.hist-role {
+  font-size: .92rem;
+  font-weight: 600;
+  margin-bottom: .15rem;
+}
+
+.hist-date {
+  color: #6b6b80;
+  font-size: .78rem;
+}
+
+.hist-right {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+
+.hist-score {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.hist-arrow {
+  color: #4a4a5a;
+  font-size: 1rem;
+  transition: transform .2s;
+}
+
+.history-item-card:hover .hist-arrow {
+  transform: translateX(3px);
+  color: #6c63ff;
+}
+
+.score-good { color: #00d4aa; }
+.score-avg { color: #f9a825; }
+.score-low { color: #ff6b6b; }
+
+/* ── Empty state ── */
+.history-empty {
+  text-align: center;
+  background: #101018;
+  border: 1px dashed rgba(108,99,255,.25);
+  border-radius: 18px;
+  padding: 3.5rem 2rem;
+  max-width: 480px;
+  margin: 2rem auto 0;
+}
+
+.history-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.history-empty h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: .5rem;
+}
+
+.history-empty p {
+  color: #6b6b80;
+  font-size: .9rem;
+}

@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+.results-bg {
+  min-height: 100vh;
+  background: #08080f;
+  color: #f0f0f8;
+  font-family: 'DM Sans', sans-serif;
+  padding: 3rem 0;
+}
+
+.results-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.results-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.results-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: .5rem;
+}
+
+.results-sub {
+  color: #6b6b80;
+  font-size: .9rem;
+  margin-bottom: 1.5rem;
+}
+
+.notice-banner {
+  background: rgba(108,99,255,.08);
+  border: 1px dashed rgba(108,99,255,.3);
+  color: #a5a0ff;
+  padding: .9rem 1.2rem;
+  border-radius: 12px;
+  font-size: .85rem;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.qa-review {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.qa-item {
+  background: #101018;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 1.2rem;
+}
+
+.qa-q {
+  font-size: .9rem;
+  font-weight: 600;
+  margin-bottom: .6rem;
+  font-family: 'Syne', sans-serif;
+}
+
+.qa-a {
+  font-size: .88rem;
+  line-height: 1.6;
+  color: #c5c5d8;
+}
+
+.results-actions {
+  display: flex;
+  gap: .75rem;
+  justify-content: center;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.08);
+  color: #f0f0f8;
+  font-family: 'Syne', sans-serif;
+  font-size: .88rem;
+  font-weight: 600;
+  padding: .65rem 1.4rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.btn-outline:hover {
+  border-color: #6c63ff;
+  color: #6c63ff;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  border: none;
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: .88rem;
+  font-weight: 600;
+  padding: .65rem 1.4rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+
+.btn-primary:hover {
+  opacity: .9;
+}
+
+/* ── MCQ Summary Card ── */
+.mcq-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: #101018;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 1.3rem 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.mcq-summary-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6c63ff, #00d4aa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mcq-summary-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #08080f;
+}
+
+.mcq-summary-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: .2rem;
+}
+
+.mcq-summary-sub {
+  color: #6b6b80;
+  font-size: .82rem;
+}
+
+/* ── MCQ Review (in Results page) ── */
+.mcq-review-options {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-top: .6rem;
+}
+
+.mcq-review-opt {
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  font-size: .85rem;
+  color: #c5c5d8;
+}
+
+.mcq-review-correct {
+  background: rgba(0,212,170,.08);
+  border-color: rgba(0,212,170,.3);
+  color: #00d4aa;
+}
+
+.mcq-review-wrong {
+  background: rgba(255,107,107,.08);
+  border-color: rgba(255,107,107,.3);
+  color: #ff8a8a;
+}
+
+.qa-explanation {
+  margin-top: .8rem;
+  padding-top: .8rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  color: #a5a0ff;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+/* ── Overall Score Ring (Results hero) ── */
+.results-score-ring {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  position: relative;
+}
+
+.results-score-ring::before {
+  content: '';
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #08080f;
+}
+
+.ring-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #6c63ff, #00d4aa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Score summary row (MCQ + AI score cards side by side) ── */
+.score-summary-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .score-summary-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Per-question score badge ── */
+.qa-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .6rem;
+}
+
+.qa-item-header .qa-q {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.qa-score {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  padding: .2rem .6rem;
+  border-radius: 8px;
+}
+
+.score-good {
+  color: #00d4aa;
+  background: rgba(0,212,170,.1);
+}
+
+.score-avg {
+  color: #f9a825;
+  background: rgba(249,168,37,.1);
+}
+
+.score-low {
+  color: #ff6b6b;
+  background: rgba(255,107,107,.1);
+}
+
+/* ── Feedback tags (strengths / improvements) ── */
+.qa-feedback-tags {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-top: .8rem;
+}
+
+.fb-tag {
+  padding: .25rem .7rem;
+  border-radius: 20px;
+  font-size: .76rem;
+  font-weight: 500;
+}
+
+.fb-good {
+  background: rgba(0,212,170,.1);
+  color: #00d4aa;
+  border: 1px solid rgba(0,212,170,.2);
+}
+
+.fb-improve {
+  background: rgba(255,107,107,.1);
+  color: #ff8a8a;
+  border: 1px solid rgba(255,107,107,.2);
+}
