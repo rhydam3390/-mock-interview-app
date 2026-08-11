@@ -2,8 +2,8 @@
 
 .results-bg {
   min-height: 100vh;
-  background: #08080f;
-  color: #f0f0f8;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'DM Sans', sans-serif;
   padding: 3rem 0;
 }
@@ -19,7 +19,63 @@
   margin-bottom: 2.5rem;
 }
 
+.round-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  margin-bottom: 1rem;
+}
+
+.round-breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: .9rem 1.2rem;
+}
+
+.round-breakdown-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(108,99,255,.15);
+  color: var(--accent-light);
+  font-size: .8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.round-breakdown-info {
+  flex: 1;
+}
+
+.round-breakdown-role {
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.round-breakdown-sub {
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+.round-breakdown-score {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
 .results-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
   font-family: 'Syne', sans-serif;
   font-size: 1.8rem;
   font-weight: 800;
@@ -27,7 +83,7 @@
 }
 
 .results-sub {
-  color: #6b6b80;
+  color: var(--muted);
   font-size: .9rem;
   margin-bottom: 1.5rem;
 }
@@ -35,7 +91,7 @@
 .notice-banner {
   background: rgba(108,99,255,.08);
   border: 1px dashed rgba(108,99,255,.3);
-  color: #a5a0ff;
+  color: var(--accent-light);
   padding: .9rem 1.2rem;
   border-radius: 12px;
   font-size: .85rem;
@@ -51,8 +107,8 @@
 }
 
 .qa-item {
-  background: #101018;
-  border: 1px solid rgba(255,255,255,.08);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.2rem;
 }
@@ -67,7 +123,7 @@
 .qa-a {
   font-size: .88rem;
   line-height: 1.6;
-  color: #c5c5d8;
+  color: var(--text-secondary);
 }
 
 .results-actions {
@@ -77,9 +133,12 @@
 }
 
 .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
   background: transparent;
-  border: 1px solid rgba(255,255,255,.08);
-  color: #f0f0f8;
+  border: 1px solid var(--border);
+  color: var(--text);
   font-family: 'Syne', sans-serif;
   font-size: .88rem;
   font-weight: 600;
@@ -90,12 +149,15 @@
 }
 
 .btn-outline:hover {
-  border-color: #6c63ff;
-  color: #6c63ff;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-purple));
   border: none;
   color: #fff;
   font-family: 'Syne', sans-serif;
@@ -116,8 +178,8 @@
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  background: #101018;
-  border: 1px solid rgba(255,255,255,.08);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 1.3rem 1.5rem;
   margin-bottom: 1.2rem;
@@ -127,7 +189,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6c63ff, #00d4aa);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,7 +200,7 @@
   font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 1.1rem;
-  color: #08080f;
+  color: var(--bg);
 }
 
 .mcq-summary-title {
@@ -149,7 +211,7 @@
 }
 
 .mcq-summary-sub {
-  color: #6b6b80;
+  color: var(--muted);
   font-size: .82rem;
 }
 
@@ -164,31 +226,54 @@
 .mcq-review-opt {
   padding: .6rem .9rem;
   border-radius: 10px;
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.06);
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
   font-size: .85rem;
-  color: #c5c5d8;
+  color: var(--text-secondary);
 }
 
 .mcq-review-correct {
   background: rgba(0,212,170,.08);
   border-color: rgba(0,212,170,.3);
-  color: #00d4aa;
+  color: var(--accent2);
 }
 
 .mcq-review-wrong {
   background: rgba(255,107,107,.08);
   border-color: rgba(255,107,107,.3);
-  color: #ff8a8a;
+  color: var(--danger-soft);
 }
 
 .qa-explanation {
+  display: flex;
+  align-items: flex-start;
+  gap: .4rem;
   margin-top: .8rem;
   padding-top: .8rem;
-  border-top: 1px solid rgba(255,255,255,.06);
-  color: #a5a0ff;
+  border-top: 1px solid var(--border-soft);
+  color: var(--accent-light);
   font-size: .82rem;
   line-height: 1.5;
+}
+
+.qa-explanation svg {
+  flex-shrink: 0;
+  margin-top: .15rem;
+}
+
+.qa-reasoning {
+  margin-top: .6rem;
+  padding: .8rem 1rem;
+  background: rgba(108,99,255,.05);
+  border: 1px solid rgba(108,99,255,.15);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: .82rem;
+  line-height: 1.6;
+}
+
+.qa-reasoning strong {
+  color: var(--accent-light);
 }
 
 /* ── Overall Score Ring (Results hero) ── */
@@ -209,7 +294,7 @@
   width: 84px;
   height: 84px;
   border-radius: 50%;
-  background: #08080f;
+  background: var(--bg);
 }
 
 .ring-num {
@@ -218,7 +303,7 @@
   font-weight: 800;
   position: relative;
   z-index: 1;
-  background: linear-gradient(135deg, #6c63ff, #00d4aa);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -262,18 +347,18 @@
 }
 
 .score-good {
-  color: #00d4aa;
+  color: var(--accent2);
   background: rgba(0,212,170,.1);
 }
 
 .score-avg {
-  color: #f9a825;
+  color: var(--amber);
   background: rgba(249,168,37,.1);
 }
 
 .score-low {
-  color: #ff6b6b;
-  background: rgba(255,107,107,.1);
+  color: var(--warn);
+  background: rgba(233,158,74,.1);
 }
 
 /* ── Feedback tags (strengths / improvements) ── */
@@ -285,6 +370,9 @@
 }
 
 .fb-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
   padding: .25rem .7rem;
   border-radius: 20px;
   font-size: .76rem;
@@ -293,12 +381,12 @@
 
 .fb-good {
   background: rgba(0,212,170,.1);
-  color: #00d4aa;
+  color: var(--accent2);
   border: 1px solid rgba(0,212,170,.2);
 }
 
 .fb-improve {
-  background: rgba(255,107,107,.1);
-  color: #ff8a8a;
-  border: 1px solid rgba(255,107,107,.2);
+  background: rgba(139,148,255,.1);
+  color: var(--accent-light);
+  border: 1px solid rgba(139,148,255,.2);
 }

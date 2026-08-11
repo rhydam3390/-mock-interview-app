@@ -1,0 +1,69 @@
+/* Global theme tokens. Dark is the default (matches the original design);
+   [data-theme="light"] overrides the surface/text tokens. Brand and status
+   colors (accent, score colors) stay the same across both themes on purpose —
+   only backgrounds, borders, and text flip. */
+
+:root,
+[data-theme="dark"] {
+  --bg: #08080f;
+  --card: #101018;
+  --text: #f0f0f8;
+  --text-secondary: #c5c5d8;
+  --muted: #6b6b80;
+  --muted-light: #9a9ab0;
+  --placeholder: #55556b;
+
+  --border: rgba(255,255,255,.08);
+  --border-soft: rgba(255,255,255,.06);
+  --border-strong: rgba(255,255,255,.12);
+  --border-strong2: rgba(255,255,255,.3);
+  --surface: rgba(255,255,255,.04);
+  --surface-soft: rgba(255,255,255,.03);
+
+  --accent: #6c63ff;
+  --accent2: #00d4aa;
+  --accent-purple: #8b5cf6;
+  --accent-light: #a5a0ff;
+  --warn: #e99e4a;
+  --amber: #f9a825;
+  --danger-soft: #ff8a8a;
+}
+
+[data-theme="light"] {
+  --bg: #f7f7fb;
+  --card: #ffffff;
+  --text: #17171f;
+  --text-secondary: #43434f;
+  --muted: #6f6f80;
+  --muted-light: #83839a;
+  --placeholder: #9d9dae;
+
+  --border: rgba(8,8,15,.09);
+  --border-soft: rgba(8,8,15,.06);
+  --border-strong: rgba(8,8,15,.14);
+  --border-strong2: rgba(8,8,15,.25);
+  --surface: rgba(8,8,15,.035);
+  --surface-soft: rgba(8,8,15,.025);
+
+  /* Brand/status colors stay identical to dark mode — see note above */
+}
+
+/* ── Theme toggle button (shared across all pages) ── */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted-light);
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}

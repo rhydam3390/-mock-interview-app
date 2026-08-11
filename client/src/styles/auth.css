@@ -3,13 +3,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #08080f;
-  --card: #101018;
-  --border: rgba(255,255,255,0.08);
-  --accent: #6c63ff;
-  --accent2: #00d4aa;
-  --text: #f0f0f8;
-  --muted: #6b6b80;
   --error: #ff5c5c;
 }
 
@@ -66,11 +59,10 @@ body {
 }
 
 .logo-icon {
-  font-size: 1.4rem;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent2);
 }
 
 .logo-text {
@@ -97,6 +89,9 @@ body {
 
 /* ── Error ── */
 .auth-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   background: rgba(255,92,92,0.1);
   border: 1px solid rgba(255,92,92,0.3);
   color: var(--error);
@@ -104,6 +99,10 @@ body {
   border-radius: 10px;
   font-size: 0.875rem;
   margin-bottom: 1.2rem;
+}
+
+.auth-error svg {
+  flex-shrink: 0;
 }
 
 /* ── Form ── */
@@ -129,7 +128,7 @@ body {
 
 .form-group input,
 .form-group select {
-  background: rgba(255,255,255,0.04);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.75rem 1rem;
@@ -150,14 +149,65 @@ body {
 }
 
 .form-group select option {
-  background: #1a1a2e;
+  background: var(--card);
   color: var(--text);
+}
+
+/* ── Inputs with leading icon (and optional trailing toggle) ── */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.input-with-icon input {
+  padding-left: 2.6rem;
+}
+
+.input-icon-toggle {
+  position: absolute;
+  right: .9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: .3rem;
+  border-radius: 6px;
+  transition: color .2s, background .2s;
+}
+
+.input-icon-toggle:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.password-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .76rem;
+  color: var(--muted);
+  margin-top: .1rem;
+}
+
+.password-hint-ok {
+  color: var(--accent2);
 }
 
 /* ── Button ── */
 .auth-btn {
   margin-top: 0.5rem;
-  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  background: linear-gradient(135deg, var(--accent), var(--accent-purple));
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -206,7 +256,7 @@ body {
   display: inline-block;
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid var(--border-strong2);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;

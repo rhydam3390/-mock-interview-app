@@ -2,7 +2,7 @@
 .nav-link-btn {
   background: transparent;
   border: none;
-  color: #c5c5d8;
+  color: var(--text-secondary);
   font-family: 'DM Sans', sans-serif;
   font-size: .85rem;
   font-weight: 500;
@@ -22,8 +22,8 @@
 
 .dash-actions-row .btn-outline {
   background: transparent;
-  border: 1px solid rgba(255,255,255,.1);
-  color: #f0f0f8;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
   font-family: 'Syne', sans-serif;
   font-size: .9rem;
   font-weight: 600;
@@ -33,6 +33,6 @@
   transition: all .2s;
 }
 .dash-actions-row .btn-outline:hover {
-  border-color: #6c63ff;
-  color: #6c63ff;
+  border-color: var(--accent);
+  color: var(--accent);
 }

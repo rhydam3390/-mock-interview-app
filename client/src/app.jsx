@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -9,10 +10,13 @@ import RoleSelect from "./pages/RoleSelect";
 import Interview from "./pages/Interview";
 import Results from "./pages/Results";
 import History from "./pages/History";
+import PrepReport from "./pages/PrepReport";
+import "./styles/theme.css";
 
 function App() {
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -31,6 +35,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <History />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/prep-report"
+            element={
+              <ProtectedRoute>
+                <PrepReport />
               </ProtectedRoute>
             }
           />
@@ -60,7 +72,8 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

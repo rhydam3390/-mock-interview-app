@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { Zap } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/landing.css";
 
 const FEATURES = [
@@ -19,11 +21,12 @@ const Landing = () => {
       <div className="landing-glow landing-glow-2" />
 
       <nav className="landing-nav">
-        <div className="auth-logo">
-          <span className="logo-icon">⚡</span>
+        <div className="auth-logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+          <span className="logo-icon"><Zap size={20} strokeWidth={2.5} /></span>
           <span className="logo-text">InterviewAI</span>
         </div>
         <div className="landing-nav-actions">
+          <ThemeToggle />
           <button className="nav-link-btn" onClick={() => navigate("/login")}>Login</button>
           <button className="nav-cta-btn" onClick={() => navigate("/register")}>Get Started</button>
         </div>

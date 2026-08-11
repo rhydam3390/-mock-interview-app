@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { PartyPopper, ThumbsUp, Sparkles, Lightbulb, Check, Plus, ArrowLeft, RotateCcw, Layers } from "lucide-react";
 import "../styles/results.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -64,6 +65,16 @@ const Results = () => {
     ? Math.round((descScores.reduce((a, b) => a + b, 0) / descScores.length) * 10) / 10
     : 0;
 
+  // Per-round breakdown for full-round simulations
+  const roundBreakdown = interview.isFullRound && interview.rounds?.length
+    ? interview.rounds.map((round, idx) => {
+        const roundAnswers = interview.answers.filter((a) => a.roundIndex === idx);
+        const scores = roundAnswers.map((a) => a.score || 0);
+        const avg = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0;
+        return { ...round, avg, count: roundAnswers.length };
+      })
+    : [];
+
   return (
     <div className="results-bg">
       <div className="results-wrap">
@@ -75,7 +86,13 @@ const Results = () => {
             <span className="ring-num">{overallScore}</span>
           </div>
           <h1 className="results-title">
-            {overallScore >= 8 ? "Excellent Performance! 🎉" : overallScore >= 5 ? "Good Effort! 👍" : "Keep Practicing! 💪"}
+            {overallScore >= 8 ? (
+              <>Excellent performance <PartyPopper size={22} strokeWidth={2.25} /></>
+            ) : overallScore >= 5 ? (
+              <>Good effort <ThumbsUp size={22} strokeWidth={2.25} /></>
+            ) : (
+              <>Worth another attempt <Sparkles size={22} strokeWidth={2.25} /></>
+            )}
           </h1>
           <p className="results-sub">
             {interview.role} · {interview.difficulty} · {interview.answers.length} questions
@@ -108,6 +125,30 @@ const Results = () => {
           )}
         </div>
 
+        {roundBreakdown.length > 0 && (
+          <>
+            <div className="section-title" style={{ marginBottom: "1rem", marginTop: "2rem" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: ".4rem" }}>
+                <Layers size={16} strokeWidth={2.25} /> Round Breakdown
+              </span>
+            </div>
+            <div className="round-breakdown-list">
+              {roundBreakdown.map((r, idx) => (
+                <div key={idx} className="round-breakdown-item">
+                  <span className="round-breakdown-index">{idx + 1}</span>
+                  <div className="round-breakdown-info">
+                    <div className="round-breakdown-role">{r.role}</div>
+                    <div className="round-breakdown-sub">{r.count} questions</div>
+                  </div>
+                  <span className={`round-breakdown-score ${r.avg >= 7.5 ? "score-good" : r.avg >= 5 ? "score-avg" : "score-low"}`}>
+                    {r.avg}/10
+                  </span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
         {/* MCQ Review */}
         {mcqAnswers.length > 0 && (
           <>
@@ -128,7 +169,11 @@ const Results = () => {
                       );
                     })}
                   </div>
-                  {a.explanation && <div className="qa-explanation">💡 {a.explanation}</div>}
+                  {a.explanation && (
+                    <div className="qa-explanation">
+                      <Lightbulb size={14} strokeWidth={2.25} /> {a.explanation}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -158,16 +203,28 @@ const Results = () => {
                   {(a.strengths?.length > 0 || a.improvements?.length > 0) && (
                     <div className="qa-feedback-tags">
                       {a.strengths?.map((s, i) => (
-                        <span className="fb-tag fb-good" key={`s${i}`}>✓ {s}</span>
+                        <span className="fb-tag fb-good" key={`s${i}`}>
+                          <Check size={12} strokeWidth={3} /> {s}
+                        </span>
                       ))}
                       {a.improvements?.map((imp, i) => (
-                        <span className="fb-tag fb-improve" key={`i${i}`}>+ {imp}</span>
+                        <span className="fb-tag fb-improve" key={`i${i}`}>
+                          <Plus size={12} strokeWidth={3} /> {imp}
+                        </span>
                       ))}
                     </div>
                   )}
 
                   {a.idealAnswerSummary && (
-                    <div className="qa-explanation">💡 <strong>Ideal answer:</strong> {a.idealAnswerSummary}</div>
+                    <div className="qa-explanation">
+                      <Lightbulb size={14} strokeWidth={2.25} /> <strong>Ideal answer:</strong> {a.idealAnswerSummary}
+                    </div>
+                  )}
+
+                  {a.idealAnswerReasoning && (
+                    <div className="qa-reasoning">
+                      <strong>Why this matters:</strong> {a.idealAnswerReasoning}
+                    </div>
                   )}
                 </div>
               ))}
@@ -176,8 +233,12 @@ const Results = () => {
         )}
 
         <div className="results-actions">
-          <button className="btn-outline" onClick={() => navigate("/dashboard")}>← Back to Dashboard</button>
-          <button className="btn-primary" onClick={() => navigate("/interview/new")}>Try Another Interview 🔁</button>
+          <button className="btn-outline" onClick={() => navigate("/dashboard")}>
+            <ArrowLeft size={15} strokeWidth={2.25} /> Back to Dashboard
+          </button>
+          <button className="btn-primary" onClick={() => navigate("/interview/new")}>
+            Try Another Interview <RotateCcw size={15} strokeWidth={2.25} />
+          </button>
         </div>
       </div>
     </div>

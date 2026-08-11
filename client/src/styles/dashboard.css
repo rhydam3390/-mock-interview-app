@@ -2,8 +2,8 @@
 
 .dashboard {
   min-height: 100vh;
-  background: #08080f;
-  color: #f0f0f8;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'DM Sans', sans-serif;
   position: relative;
   overflow-x: hidden;
@@ -24,16 +24,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.2rem 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .nav-right { display: flex; align-items: center; gap: 1rem; }
-.nav-user { color: #6b6b80; font-size: 0.9rem; }
+.nav-user { color: var(--muted); font-size: 0.9rem; }
 
 .logout-btn {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #f0f0f8;
+  background: var(--border-soft);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
   padding: 0.45rem 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -41,13 +41,11 @@
   font-family: 'DM Sans', sans-serif;
   transition: background 0.2s;
 }
-.logout-btn:hover { background: rgba(255,255,255,0.1); }
+.logout-btn:hover { background: var(--border-strong); }
 
 /* ── Main ── */
 .dash-main {
   max-width: 900px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
 }
 
 .dash-hero { margin-bottom: 2.5rem; }
@@ -58,7 +56,7 @@
   margin-bottom: 0.5rem;
   letter-spacing: -0.5px;
 }
-.dash-hero p { color: #6b6b80; }
+.dash-hero p { color: var(--muted); }
 
 /* ── Stats ── */
 .stats-row {
@@ -69,8 +67,8 @@
 }
 
 .stat-card {
-  background: #101018;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.5rem;
   display: flex;
@@ -82,17 +80,17 @@
   font-family: 'Syne', sans-serif;
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #6c63ff, #00d4aa);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.stat-label { color: #6b6b80; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-label { color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* ── Coming Soon ── */
 .coming-soon {
-  background: #101018;
+  background: var(--card);
   border: 1px dashed rgba(108,99,255,0.3);
   border-radius: 16px;
   padding: 3rem;
@@ -105,4 +103,4 @@
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
-.coming-soon p { color: #6b6b80; font-size: 0.9rem; }
+.coming-soon p { color: var(--muted); font-size: 0.9rem; }

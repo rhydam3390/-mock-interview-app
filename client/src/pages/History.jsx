@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { TrendingUp, TrendingDown, Minus, FolderOpen } from "lucide-react";
+import Sidebar from "../components/Sidebar";
+import "../styles/sidebar.css";
 import "../styles/dashboard.css";
 import "../styles/history.css";
 
@@ -35,13 +38,72 @@ const formatDate = (dateStr) => {
   return d.toLocaleDateString([], { day: "numeric", month: "short", year: "numeric" });
 };
 
+// Simple dependency-free SVG line chart showing score trend over time.
+const ProgressChart = ({ sessions }) => {
+  if (sessions.length < 2) {
+    return (
+      <p className="progress-chart-empty">
+        Complete at least 2 interviews in this view to see your progress trend.
+      </p>
+    );
+  }
+
+  const width = 640;
+  const height = 160;
+  const padding = 24;
+  const maxScore = 10;
+
+  const points = sessions.map((s, i) => {
+    const x = padding + (i / (sessions.length - 1)) * (width - padding * 2);
+    const y = height - padding - ((s.overallScore || 0) / maxScore) * (height - padding * 2);
+    return { x, y, score: s.overallScore || 0 };
+  });
+
+  const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const areaPath = `${linePath} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`;
+
+  // Trend = average of the second half vs the first half of the sessions shown
+  const mid = Math.floor(sessions.length / 2);
+  const firstHalfAvg = sessions.slice(0, mid || 1).reduce((s, iv) => s + (iv.overallScore || 0), 0) / (mid || 1);
+  const secondHalfAvg = sessions.slice(mid).reduce((s, iv) => s + (iv.overallScore || 0), 0) / (sessions.length - mid);
+  const delta = Math.round((secondHalfAvg - firstHalfAvg) * 10) / 10;
+
+  return (
+    <>
+      <div className="progress-card-header">
+        <span className="progress-card-title">Score Trend</span>
+        <span
+          className={`progress-trend ${delta > 0.3 ? "progress-trend-up" : delta < -0.3 ? "progress-trend-down" : "progress-trend-flat"}`}
+        >
+          {delta > 0.3 ? <TrendingUp size={14} strokeWidth={2.5} /> : delta < -0.3 ? <TrendingDown size={14} strokeWidth={2.5} /> : <Minus size={14} strokeWidth={2.5} />}
+          {delta > 0.3 ? `Improving (+${delta})` : delta < -0.3 ? `Declining (${delta})` : "Holding steady"}
+        </span>
+      </div>
+      <svg className="progress-chart-svg" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="progressFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#6c63ff" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#6c63ff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={areaPath} fill="url(#progressFill)" />
+        <path d={linePath} fill="none" stroke="#6c63ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        {points.map((p, i) => (
+          <circle key={i} cx={p.x} cy={p.y} r="4" fill="#08080f" stroke="#6c63ff" strokeWidth="2.5" />
+        ))}
+      </svg>
+    </>
+  );
+};
+
 const History = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const navigate = useNavigate();
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filterRole, setFilterRole] = useState("All");
+  const [chartRole, setChartRole] = useState("All");
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -73,20 +135,19 @@ const History = () => {
     ? Math.max(...completedOnly.map((i) => i.overallScore || 0))
     : 0;
 
-  return (
-    <div className="dashboard">
-      <div className="dash-glow" />
-      <nav className="dash-nav">
-        <div className="auth-logo">
-          <span className="logo-icon">⚡</span>
-          <span className="logo-text">InterviewAI</span>
-        </div>
-        <button className="logout-btn" onClick={() => navigate("/dashboard")}>
-          ← Back
-        </button>
-      </nav>
+  // Chronological (oldest first) for the trend chart, optionally filtered by role
+  const chartSessions = [...completedOnly]
+    .filter((i) => chartRole === "All" || i.role === chartRole)
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-      <main className="dash-main">
+  return (
+    <div className="app-shell">
+      <Sidebar />
+      <div className="app-content">
+        <div className="app-topbar">
+          <span className="app-topbar-user">Hi, {user?.name?.split(" ")[0]} 👋</span>
+        </div>
+        <main className="app-content-main dash-main">
         <div className="dash-hero">
           <h1>Interview History</h1>
           <p>Review your past sessions and track your improvement over time.</p>
@@ -98,7 +159,7 @@ const History = () => {
           <p style={{ color: "#6b6b80" }}>Loading history...</p>
         ) : completedOnly.length === 0 ? (
           <div className="history-empty">
-            <div className="history-empty-icon">🗂️</div>
+            <div className="history-empty-icon"><FolderOpen size={32} strokeWidth={1.75} /></div>
             <h2>No completed interviews yet</h2>
             <p>Start your first mock interview to see your history here.</p>
             <button className="auth-btn" style={{ maxWidth: "260px", margin: "1.5rem auto 0" }} onClick={() => navigate("/interview/new")}>
@@ -120,6 +181,22 @@ const History = () => {
                 <span className="stat-num">{bestScore}</span>
                 <span className="stat-label">Best Score</span>
               </div>
+            </div>
+
+            <div className="progress-card">
+              {roles.length > 2 && (
+                <select
+                  className="progress-role-select"
+                  value={chartRole}
+                  onChange={(e) => setChartRole(e.target.value)}
+                  style={{ marginBottom: ".8rem" }}
+                >
+                  {roles.map((r) => (
+                    <option key={r} value={r}>{r === "All" ? "All roles" : r}</option>
+                  ))}
+                </select>
+              )}
+              <ProgressChart sessions={chartSessions} />
             </div>
 
             <div className="history-filters">
@@ -162,7 +239,8 @@ const History = () => {
             </div>
           </>
         )}
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

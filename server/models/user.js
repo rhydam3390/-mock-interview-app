@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
     },
     targetRole: {
       type: String,
-      enum: ["Frontend Developer", "Backend Developer", "Full Stack Developer", "AI/ML Engineer", "Other"],
       default: "Full Stack Developer",
     },
     totalInterviews: { type: Number, default: 0 },

@@ -10,7 +10,9 @@ const RETRY_DELAY_MS = 1500; // wait 1.5s between retries
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Calls Gemini once. Throws on failure so callGeminiWithRetry can catch and retry.
-const callGeminiOnce = async (prompt) => {
+// `maxOutputTokens` is configurable per-call since some prompts (e.g. generating
+// several full questions) need much more room than a single short feedback object.
+const callGeminiOnce = async (prompt, maxOutputTokens = 2048) => {
   const response = await fetch(`${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -18,7 +20,7 @@ const callGeminiOnce = async (prompt) => {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.4,
-        maxOutputTokens: 2048,
+        maxOutputTokens,
       },
     }),
   });
@@ -38,17 +40,30 @@ const callGeminiOnce = async (prompt) => {
   try {
     return JSON.parse(cleanText);
   } catch (parseError) {
-    // The response may have been cut off mid-string. Try a simple repair:
-    // close any unterminated string and the object itself, then retry parsing.
     console.error("Initial JSON parse failed, attempting repair:", parseError.message);
-    let repaired = cleanText;
 
-    // If it ends mid-string (odd number of unescaped quotes), close the string
+    // If this looks like a truncated array of objects (our question-generation
+    // case), the most reliable repair is to trim back to the last FULLY
+    // complete object and close the array there — rather than guessing how
+    // to patch whatever the response was cut off in the middle of.
+    if (cleanText.startsWith("[")) {
+      const arrayRepaired = repairTruncatedArray(cleanText);
+      if (arrayRepaired !== null) {
+        try {
+          return JSON.parse(arrayRepaired);
+        } catch {
+          // fall through to the generic repair below as a last resort
+        }
+      }
+    }
+
+    // Generic repair for a single truncated object: close any unterminated
+    // string and any open arrays/objects, then retry parsing.
+    let repaired = cleanText;
     const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length;
     if (quoteCount % 2 !== 0) {
       repaired += '"';
     }
-    // Close any open arrays/objects
     const openBraces = (repaired.match(/{/g) || []).length;
     const closeBraces = (repaired.match(/}/g) || []).length;
     const openBrackets = (repaired.match(/\[/g) || []).length;
@@ -60,12 +75,50 @@ const callGeminiOnce = async (prompt) => {
   }
 };
 
+// Scans a truncated JSON array-of-objects string and trims it back to the end
+// of the last fully-balanced object, then closes the array. Returns null if
+// no complete object could be found. This is far more reliable than blind
+// quote/bracket closing when the cutoff happens mid-property rather than
+// mid-string.
+const repairTruncatedArray = (text) => {
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  let lastCompleteObjectEnd = -1;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (escape) {
+      escape = false;
+      continue;
+    }
+    if (ch === "\\") {
+      escape = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      continue;
+    }
+    if (inString) continue;
+
+    if (ch === "{") depth++;
+    if (ch === "}") {
+      depth--;
+      if (depth === 0) lastCompleteObjectEnd = i;
+    }
+  }
+
+  if (lastCompleteObjectEnd === -1) return null;
+  return text.slice(0, lastCompleteObjectEnd + 1) + "]";
+};
+
 // Retries automatically on 503 (server overloaded) or 429 (rate limited)
-const callGeminiWithRetry = async (prompt) => {
+const callGeminiWithRetry = async (prompt, maxOutputTokens = 2048) => {
   let lastError;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      return await callGeminiOnce(prompt);
+      return await callGeminiOnce(prompt, maxOutputTokens);
     } catch (error) {
       lastError = error;
       const isRetryable = error.status === 503 || error.status === 429 || error instanceof SyntaxError;
@@ -89,6 +142,7 @@ const getAIFeedback = async (questionText, userAnswer, role, difficulty) => {
       strengths: [],
       improvements: ["No answer was provided for this question."],
       idealAnswerSummary: "Try to attempt every question, even with a partial answer.",
+      idealAnswerReasoning: "",
       verdict: "Needs Work",
     };
   }
@@ -99,16 +153,17 @@ Question: ${questionText}
 
 Candidate's Answer: ${userAnswer}
 
-Evaluate this answer and respond with ONLY a valid JSON object in this exact format, with no other text before or after, and no markdown code fences. Keep every text field SHORT and concise — this is critical:
+Evaluate this answer and respond with ONLY a valid JSON object in this exact format, with no other text before or after, and no markdown code fences:
 {
   "score": <integer from 1 to 10>,
   "strengths": ["short strength point (max 10 words)", "short strength point (max 10 words)"],
   "improvements": ["short improvement point (max 10 words)", "short improvement point (max 10 words)"],
-  "idealAnswerSummary": "A brief 1-2 sentence summary, max 30 words",
+  "idealAnswerSummary": "A brief 1-2 sentence summary of the ideal answer, max 30 words",
+  "idealAnswerReasoning": "2-4 sentences explaining WHY the ideal answer is structured that way — what a real interviewer is specifically listening for, what separates a strong answer from a weak one on THIS question, and what makes this candidate's answer fall short of or meet that bar. Max 80 words. Be concrete and specific to this question, not generic advice.",
   "verdict": "Good" or "Average" or "Needs Work"
 }
 
-Keep the ENTIRE response compact — no extra text, no long explanations. Maximum 2 strengths and 2 improvements.
+Keep strengths/improvements SHORT (max 2 each). idealAnswerSummary and idealAnswerReasoning are the only fields that should have real substance — the reasoning field is for teaching the candidate how an interviewer actually thinks, not just restating the correct content.
 
 Scoring guide:
 - 8-10 (Good): Accurate, complete, well-explained, uses relevant examples
@@ -118,12 +173,14 @@ Scoring guide:
 Be fair but honest — this feedback genuinely helps the candidate improve.`;
 
   try {
-    const feedback = await callGeminiWithRetry(prompt);
+    // Slightly higher budget than before since idealAnswerReasoning adds real length
+    const feedback = await callGeminiWithRetry(prompt, 1400);
 
     feedback.score = Math.max(1, Math.min(10, Number(feedback.score) || 5));
     feedback.strengths = Array.isArray(feedback.strengths) ? feedback.strengths : [];
     feedback.improvements = Array.isArray(feedback.improvements) ? feedback.improvements : [];
     feedback.idealAnswerSummary = feedback.idealAnswerSummary || "";
+    feedback.idealAnswerReasoning = feedback.idealAnswerReasoning || "";
     feedback.verdict = ["Good", "Average", "Needs Work"].includes(feedback.verdict)
       ? feedback.verdict
       : "Average";
@@ -136,9 +193,10 @@ Be fair but honest — this feedback genuinely helps the candidate improve.`;
       strengths: ["Answer was submitted."],
       improvements: ["AI feedback temporarily unavailable — Gemini's free servers were busy. Please try this interview again in a moment."],
       idealAnswerSummary: "",
+      idealAnswerReasoning: "",
       verdict: "Average",
     };
   }
 };
 
-module.exports = { getAIFeedback };
+module.exports = { getAIFeedback, callGeminiWithRetry };

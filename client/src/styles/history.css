@@ -1,3 +1,75 @@
+/* ── Progress over time chart ── */
+.progress-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem 1.7rem;
+  margin-bottom: 2rem;
+}
+
+.progress-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-bottom: 1.2rem;
+}
+
+.progress-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.progress-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .82rem;
+  font-weight: 600;
+  padding: .3rem .75rem;
+  border-radius: 20px;
+}
+
+.progress-trend-up {
+  color: var(--accent2);
+  background: rgba(0,212,170,.1);
+}
+
+.progress-trend-down {
+  color: var(--warn);
+  background: rgba(233,158,74,.1);
+}
+
+.progress-trend-flat {
+  color: var(--muted-light);
+  background: var(--surface);
+}
+
+.progress-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.progress-chart-empty {
+  color: var(--muted);
+  font-size: .85rem;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.progress-role-select {
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  font-size: .82rem;
+  padding: .4rem .8rem;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+}
+
 /* ── Filter chips ── */
 .history-filters {
   display: flex;
@@ -7,9 +79,9 @@
 }
 
 .filter-chip {
-  background: #101018;
-  border: 1px solid rgba(255,255,255,.08);
-  color: #6b6b80;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
   padding: .5rem 1.1rem;
   border-radius: 20px;
   cursor: pointer;
@@ -24,7 +96,7 @@
 }
 
 .filter-chip-active {
-  background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+  background: linear-gradient(135deg, var(--accent), var(--accent-purple));
   border-color: transparent;
   color: #fff;
   font-weight: 600;
@@ -32,8 +104,8 @@
 
 /* ── History list cards ── */
 .history-item-card {
-  background: #101018;
-  border: 1px solid rgba(255,255,255,.08);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.1rem 1.3rem;
   display: flex;
@@ -68,7 +140,7 @@
 }
 
 .hist-date {
-  color: #6b6b80;
+  color: var(--muted);
   font-size: .78rem;
 }
 
@@ -85,24 +157,24 @@
 }
 
 .hist-arrow {
-  color: #4a4a5a;
+  color: var(--muted-light);
   font-size: 1rem;
   transition: transform .2s;
 }
 
 .history-item-card:hover .hist-arrow {
   transform: translateX(3px);
-  color: #6c63ff;
+  color: var(--accent);
 }
 
-.score-good { color: #00d4aa; }
-.score-avg { color: #f9a825; }
-.score-low { color: #ff6b6b; }
+.score-good { color: var(--accent2); }
+.score-avg { color: var(--amber); }
+.score-low { color: var(--warn); }
 
 /* ── Empty state ── */
 .history-empty {
   text-align: center;
-  background: #101018;
+  background: var(--card);
   border: 1px dashed rgba(108,99,255,.25);
   border-radius: 18px;
   padding: 3.5rem 2rem;
@@ -123,6 +195,6 @@
 }
 
 .history-empty p {
-  color: #6b6b80;
+  color: var(--muted);
   font-size: .9rem;
 }
